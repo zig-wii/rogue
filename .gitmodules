@@ -1,0 +1,3 @@
+[submodule "vendor/zogc"]
+	path = vendor/zogc
+	url = https://github.com/zig-wii/zogc
