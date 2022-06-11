@@ -3,11 +3,11 @@ const std = @import("std");
 const main = @import("main.zig");
 const components = @import("components.zig");
 
-// zogc
-const zogc = @import("zogc");
-const Pad = zogc.Pad;
-const Rectangle = zogc.Rectangle;
-const utils = zogc.utils;
+// ogc
+const ogc = @import("ogc");
+const Pad = ogc.Pad;
+const Rectangle = ogc.Rectangle;
+const utils = ogc.utils;
 
 pub const deadzone = 0.1;
 pub const speed: f32 = 10;

@@ -1,8 +1,8 @@
 const main = @import("main.zig");
 
-// zogc
-const zogc = @import("zogc");
-const Rectangle = zogc.Rectangle;
+// ogc
+const ogc = @import("ogc");
+const Rectangle = ogc.Rectangle;
 
 /// Adds physics handling for type. Returns whether type is grounded
 /// or not. Expects following variables: x, y, width, height, x_speed, y_speed, gravity, (grounded).

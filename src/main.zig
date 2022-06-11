@@ -2,12 +2,12 @@
 const std = @import("std");
 const ArrayList = std.ArrayList;
 
-// zogc
-const zogc = @import("zogc");
-const Pad = zogc.Pad;
-const Video = zogc.Video;
-const Rectangle = zogc.Rectangle;
-const utils = zogc.utils;
+// ogc
+const ogc = @import("ogc");
+const Pad = ogc.Pad;
+const Video = ogc.Video;
+const Rectangle = ogc.Rectangle;
+const utils = ogc.utils;
 
 // Objects
 const Camera = @import("Camera.zig");
@@ -131,5 +131,5 @@ pub fn run(video: *Video) !void {
 }
 
 export fn main(_: c_int, _: [*]const [*:0]const u8) void {
-    zogc.start(run);
+    ogc.start(run);
 }

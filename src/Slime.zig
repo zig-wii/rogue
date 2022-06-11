@@ -5,10 +5,10 @@ const Player = @import("Player.zig");
 const components = @import("components.zig");
 const Rng = std.rand.DefaultPrng;
 
-// zogc
-const zogc = @import("zogc");
-const Rectangle = zogc.Rectangle;
-const utils = zogc.utils;
+// ogc
+const ogc = @import("ogc");
+const Rectangle = ogc.Rectangle;
+const utils = ogc.utils;
 
 x: f32,
 y: f32,
