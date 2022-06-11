@@ -121,7 +121,10 @@ pub fn run(video: *Video) !void {
         // Temporary death handling for slime
         if (state.slime.isDead or state.slime.y > screen_height) state.slime = Slime.init(200, 200);
 
-        utils.rectangle(Rectangle.init(50, 50, 50, 50), 0xFF00FFFF);
+        // Square
+        const box = Rectangle.init(50, 50, 50, 100);
+        utils.rectangle(box, 0xFF00FFFF);
+        utils.border(box, 0xFFFFFFFF, 5);
 
         video.finish();
     }
