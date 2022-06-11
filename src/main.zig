@@ -131,7 +131,5 @@ pub fn run(video: *Video) !void {
 }
 
 export fn main(_: c_int, _: [*]const [*:0]const u8) void {
-    Pad.init();
-    var video = Video.init();
-    run(&video) catch |err| @panic(@errorName(err));
+    zogc.start(run);
 }
