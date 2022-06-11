@@ -79,12 +79,14 @@ pub const State = struct {
 };
 
 // Constants
-pub const screen_width: f32 = 640;
-pub const screen_height: f32 = 480;
+pub var screen_width: f32 = undefined;
+pub var screen_height: f32 = undefined;
 
 pub fn run(video: *Video) !void {
     // Texture
     Video.load_tpl("../../../src/textures/atlas.tpl");
+    screen_width = @intToFloat(f32, video.width);
+    screen_height = @intToFloat(f32, video.height);
 
     // State
     var state = State{
