@@ -4,10 +4,10 @@ const ArrayList = std.ArrayList;
 
 // zogc
 const zogc = @import("zogc");
-const utils = zogc.utils;
-const Video = zogc.Video;
-const Gpu = zogc.Gpu;
 const Pad = zogc.Pad;
+const Video = zogc.Video;
+const Rectangle = zogc.Rectangle;
+const utils = zogc.utils;
 
 // Objects
 const Camera = @import("Camera.zig");
@@ -41,8 +41,8 @@ pub const Sprite = enum {
     block,
     heart,
 
-    pub fn draw(self: Sprite, area: [4][2]f32) void {
-        const settings: [4]f32 = switch (self) {
+    pub fn draw(self: Sprite, box: Rectangle) void {
+        const coords: [4]f32 = switch (self) {
             //                 x  y  w   h
             .player_idle => .{ 0, 0, 32, 32 },
             .player_dash => .{ 32, 0, 32, 32 },
@@ -66,7 +66,7 @@ pub const Sprite = enum {
             .block => .{ 64, 160, 32, 32 },
             .heart => .{ 128, 96, 32, 32 },
         };
-        utils.sprite(area, settings, .{ 256, 256 });
+        utils.sprite(box, coords, .{ 256, 256 });
     }
 };
 
@@ -84,8 +84,7 @@ pub const screen_height: f32 = 480;
 
 pub fn run(video: *Video) !void {
     // Texture
-    var texture = Gpu.init();
-    texture.load_tpl("../../../src/textures/atlas.tpl");
+    Video.load_tpl("../../../src/textures/atlas.tpl");
 
     // State
     var state = State{

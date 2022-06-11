@@ -3,6 +3,7 @@ const Sprite = @import("main.zig").Sprite;
 
 // zogc
 const zogc = @import("zogc");
+const Rectangle = zogc.Rectangle;
 const utils = zogc.utils;
 
 x: f32,
@@ -16,6 +17,6 @@ pub fn init(x: f32, y: f32, sprite: Sprite) Block {
 }
 
 pub fn drawSprite(self: *Block) void {
-    var area = utils.rectangle(self.x, self.y, self.width, self.height);
+    var area = Rectangle.init(self.x, self.y, self.width, self.height);
     self.sprite.draw(area);
 }

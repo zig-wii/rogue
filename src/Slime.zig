@@ -7,6 +7,7 @@ const Rng = std.rand.DefaultPrng;
 
 // zogc
 const zogc = @import("zogc");
+const Rectangle = zogc.Rectangle;
 const utils = zogc.utils;
 
 x: f32,
@@ -46,13 +47,13 @@ pub fn drawHealth(self: *Slime) void {
     var hp = self.*.health;
     while (hp > 0) : (hp -= 1) {
         var offset_x = (self.*.x - 32) + (hp * 16);
-        main.Sprite.heart.draw(utils.rectangle(offset_x, self.y - 32, 32, 32));
+        main.Sprite.heart.draw(Rectangle.init(offset_x, self.y - 32, 32, 32));
     }
 }
 
-pub fn area(self: *Slime) [4][2]f32 {
-    var box = utils.rectangle(self.x, self.y, self.width, self.height);
-    if (self.direction == .left) utils.mirror(&box);
+pub fn area(self: *Slime) Rectangle {
+    var box = Rectangle.init(self.x, self.y, self.width, self.height);
+    if (self.direction == .left) box.mirror();
     return box;
 }
 
@@ -118,7 +119,7 @@ pub fn run(self: *Slime, state: *main.State) void {
         if (object.*) |*player| {
             if (self.state != .hurt or self.state == .hurt and self.state.hurt.hit_by != player.port) {
                 if (player.sword_area()) |sword| {
-                    if (utils.diag_collides(self.area(), sword)) |delta| {
+                    if (self.area().diag_collides(sword)) |delta| {
                         if (player.dashes < Player.dashes_max) player.*.dashes += 1;
                         const knockback = 8;
                         const diff = self.x - player.x;

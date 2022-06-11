@@ -6,6 +6,7 @@ const components = @import("components.zig");
 // zogc
 const zogc = @import("zogc");
 const Pad = zogc.Pad;
+const Rectangle = zogc.Rectangle;
 const utils = zogc.utils;
 
 pub const deadzone = 0.1;
@@ -59,10 +60,10 @@ pub fn drawSprite(self: *Player, comptime sprite: main.Sprite) void {
     sprite.draw(self.area());
 }
 
-pub fn area(self: *Player) [4][2]f32 {
-    var box = utils.rectangle(self.x, self.y, self.width, self.height);
-    if (self.direction == .left) utils.mirror(&box);
-    if (self.state == .attack) utils.rotate(&box, utils.center(box), 90 + self.sword_angle().?);
+pub fn area(self: *Player) Rectangle {
+    var box = Rectangle.init(self.x, self.y, self.width, self.height);
+    if (self.direction == .left) box.mirror();
+    if (self.state == .attack) box.rotate(box.center(), 90 + self.sword_angle().?);
     return box;
 }
 
@@ -73,22 +74,22 @@ fn sword_angle(self: *Player) ?f32 {
     return angle;
 }
 
-pub fn sword_area(self: *Player) ?[4][2]f32 {
+pub fn sword_area(self: *Player) ?Rectangle {
     if (self.state != .attack) return null;
     const offset: [2]f32 = if (self.direction == .left) .{ 2, 60 } else .{ -34, 60 };
     const angle = self.sword_angle().?;
-    var box = utils.rectangle(self.*.x - offset[0], self.*.y - offset[1], 32, 96);
-    const x = box[0][0];
-    const y = box[0][1];
-    const width = box[1][0] - box[0][0];
-    const height = box[2][1] - box[0][1];
+    var box = Rectangle.init(self.x - offset[0], self.y - offset[1], 32, 96);
+    const x = box.area[0][0];
+    const y = box.area[0][1];
+    const width = box.width();
+    const height = box.height();
 
     // Draw attacking sword
     if (self.direction == .right) {
-        utils.mirror(&box);
-        utils.rotate(&box, .{ x + width / 2, y + height }, 90);
-    } else utils.rotate(&box, .{ x + width / 2, y + height }, -90);
-    utils.rotate(&box, .{ self.x + self.width / 2, self.y + self.height / 2 }, angle);
+        box.mirror();
+        box.rotate(.{ x + width / 2, y + height }, 90);
+    } else box.rotate(.{ x + width / 2, y + height }, -90);
+    box.rotate(.{ self.x + self.width / 2, self.y + self.height / 2 }, angle);
     return box;
 }
 
@@ -96,7 +97,7 @@ pub fn drawHealth(self: *Player) void {
     var hp = self.*.health;
     while (hp > 0) : (hp -= 1) {
         var offset_x = (self.*.x - 16) + (hp * 16);
-        main.Sprite.heart.draw(utils.rectangle(offset_x, self.y - 32, 32, 32));
+        main.Sprite.heart.draw(Rectangle.init(offset_x, self.y - 32, 32, 32));
     }
 }
 
@@ -143,7 +144,7 @@ pub fn run(self: *Player, state: *main.State) void {
 
             // Draw glider
             if (self.*.gravity == 0.01) {
-                main.Sprite.glider.draw(utils.rectangle(self.x, self.y - 64, 64, 64));
+                main.Sprite.glider.draw(Rectangle.init(self.x, self.y - 64, 64, 64));
             }
 
             // Sprites
@@ -200,7 +201,7 @@ pub fn run(self: *Player, state: *main.State) void {
 
     // Hurtbox component
     if (self.state != .hurt) {
-        if (utils.offset_collides(self.area(), state.slime.area())) |delta| {
+        if (self.area().offset_collides(state.slime.area())) |delta| {
             const knockback = 5;
             self.*.health -= 1;
             self.*.y_speed = delta[1] * knockback;

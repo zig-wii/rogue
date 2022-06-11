@@ -2,7 +2,7 @@ const main = @import("main.zig");
 
 // zogc
 const zogc = @import("zogc");
-const utils = zogc.utils;
+const Rectangle = zogc.Rectangle;
 
 /// Adds physics handling for type. Returns whether type is grounded
 /// or not. Expects following variables: x, y, width, height, x_speed, y_speed, gravity, (grounded).
@@ -14,16 +14,16 @@ pub fn add_physics(self: anytype, state: *main.State) void {
     // Collision
     if (@hasField(@TypeOf(self.*), "grounded")) self.*.grounded = false;
     for (state.blocks.items) |block| {
-        const block_area = utils.rectangle(block.x, block.y, block.width, block.height);
+        const block_area = Rectangle.init(block.x, block.y, block.width, block.height);
 
         // Horizontal
-        if (utils.aabb_collides(block_area, utils.rectangle(self.x + self.x_speed, self.y, self.width, self.height))) {
+        if (block_area.aabb_collides(Rectangle.init(self.x + self.x_speed, self.y, self.width, self.height))) {
             if (self.x_speed < 0) self.*.x = block.x + block.width else self.*.x = block.x - self.width;
             self.*.x_speed = 0;
         }
 
         // Vertical
-        if (utils.aabb_collides(block_area, utils.rectangle(self.x, self.y - self.y_speed, self.width, self.height))) {
+        if (block_area.aabb_collides(Rectangle.init(self.x, self.y - self.y_speed, self.width, self.height))) {
             if (self.y_speed < 0) {
                 if (@hasField(@TypeOf(self.*), "grounded")) self.*.grounded = true;
                 self.*.y = block.y - self.height;
