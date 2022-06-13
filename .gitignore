@@ -1,5 +1,5 @@
 docs
-build
+zig-out
 zig-cache
 devkitpro
 .DS_Store
