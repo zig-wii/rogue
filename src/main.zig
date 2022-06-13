@@ -7,7 +7,6 @@ const ogc = @import("ogc");
 const Pad = ogc.Pad;
 const Video = ogc.Video;
 const Rectangle = ogc.Rectangle;
-const utils = ogc.utils;
 
 // Objects
 const Camera = @import("Camera.zig");
@@ -66,7 +65,7 @@ pub const Sprite = enum {
             .block => .{ 64, 160, 32, 32 },
             .heart => .{ 128, 96, 32, 32 },
         };
-        utils.sprite(box, coords, .{ 256, 256 });
+        box.draw_sprite(coords, .{ 256, 256 });
     }
 };
 
@@ -122,9 +121,10 @@ pub fn run(video: *Video) !void {
         if (state.slime.isDead or state.slime.y > screen_height) state.slime = Slime.init(200, 200);
 
         // Square
-        const box = Rectangle.init(50, 50, 50, 100);
-        utils.rectangle(box, 0xFF00FFFF);
-        utils.border(box, 0xFFFFFFFF, 5);
+        var box = Rectangle.init(50, 50, 50, 100);
+        box.rotate(box.center(), 45);
+        box.draw(0xFF00FFFF);
+        box.draw_border(0xFFFFFFFF, 5);
 
         video.finish();
     }
