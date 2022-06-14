@@ -84,8 +84,8 @@ pub var screen_height: f32 = undefined;
 pub fn run(video: *Video) !void {
     // Texture
     Video.load_tpl("../../../src/textures/atlas.tpl");
-    screen_width = @intToFloat(f32, video.width);
-    screen_height = @intToFloat(f32, video.height);
+    screen_width = video.width;
+    screen_height = video.height;
 
     // State
     var state = State{
