@@ -109,7 +109,9 @@ pub fn run(video: *Video) !void {
         // Camera
         for (state.players) |object| if (object) |player| {
             state.camera.follow(player.x, player.y);
-            video.camera(state.camera.x, state.camera.y);
+            video.set_camera(.{
+                .orthographic = .{ .x = state.camera.x, .y = state.camera.y },
+            });
         };
 
         // Other
