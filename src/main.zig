@@ -131,5 +131,5 @@ pub fn run(video: *Video) !void {
 }
 
 export fn main(_: c_int, _: [*]const [*:0]const u8) void {
-    ogc.start(run);
+    ogc.start(run, .orthographic);
 }
