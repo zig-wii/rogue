@@ -83,7 +83,10 @@ pub var screen_height: f32 = undefined;
 
 pub fn run(video: *Video) !void {
     // Texture
-    Video.load_tpl("../../../src/textures/atlas.tpl");
+    const textures = struct {
+        var atlas = @embedFile("textures/atlas.tpl").*;
+    };
+    Video.load_tpl(&textures.atlas);
     screen_width = video.width;
     screen_height = video.height;
 
