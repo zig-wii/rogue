@@ -71,7 +71,7 @@ pub const Sprite = enum {
 
 // Global state
 pub const State = struct {
-    players: [4]?Player,
+    players: [4]?Player = .{null} ** 4,
     blocks: ArrayList(Block),
     slime: Slime,
     camera: Camera,
@@ -83,16 +83,12 @@ pub var screen_height: f32 = undefined;
 
 pub fn run(video: *Video) !void {
     // Texture
-    const textures = struct {
-        var atlas = @embedFile("textures/atlas.tpl").*;
-    };
-    Video.load_tpl(&textures.atlas);
+    Video.load_tpl("../../../src/textures/atlas.tpl");
     screen_width = video.width;
     screen_height = video.height;
 
     // State
     var state = State{
-        .players = .{null} ** 4,
         .slime = Slime.init(200, 200),
         .blocks = ArrayList(Block).init(std.heap.c_allocator),
         .camera = Camera.init(),
@@ -103,13 +99,12 @@ pub fn run(video: *Video) !void {
     try world_gen.generate(&state);
 
     while (true) {
-        video.start();
-        defer video.finish();
-
         // Handle new players
         for (Pad.update()) |controller, i| {
             if (controller and state.players[i] == null) state.players[i] = Player.init(128, 32, i);
         }
+
+        video.start();
 
         // Camera
         for (state.players) |object| if (object) |player| {
@@ -123,9 +118,17 @@ pub fn run(video: *Video) !void {
         for (state.blocks.items) |*block| block.drawSprite();
         state.slime.run(&state);
         for (state.players) |*object| if (object.*) |*player| player.run(&state);
-        
+
         // Temporary death handling for slime
         if (state.slime.isDead or state.slime.y > screen_height) state.slime = Slime.init(200, 200);
+
+        // Square
+        var box = Rectangle.init(50, 50, 50, 100);
+        box.rotate(box.center(), 45);
+        box.draw(0xFF00FFFF);
+        box.draw_border(0xFFFFFFFF, 5);
+
+        video.finish();
     }
 }
 
