@@ -8,7 +8,7 @@ pub const Options = struct {
     wii_ip: ?[]const u8 = null,
     textures: ?[]const u8 = null,
     dolphin: []const u8 = switch (builtin.target.os.tag) {
-        .macos => "Dolphin",
+        .macos => "~/Library/Applications/Dolphin.app",
         .windows => "Dolphin.exe",
         else => "dolphin-emu",
     },
