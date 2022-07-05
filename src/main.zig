@@ -39,6 +39,7 @@ pub const Sprite = enum {
     brick_altered,
     block,
     heart,
+    stone,
 
     pub fn draw(self: Sprite, box: Rectangle) void {
         const coords: [4]f32 = switch (self) {
@@ -64,6 +65,7 @@ pub const Sprite = enum {
             .brick_altered => .{ 32, 160, 32, 32 },
             .block => .{ 64, 160, 32, 32 },
             .heart => .{ 128, 96, 32, 32 },
+            .stone => .{ 0, 192, 32, 32}
         };
         box.draw_sprite(coords, .{ 256, 256 });
     }
